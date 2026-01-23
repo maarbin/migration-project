@@ -47,7 +47,7 @@ if __name__ == "__main__":
             "full_name": fake.name(),
             "email": email,
             "phone": generate_dirty_phone(),
-            "date": generate_dirty_date(),
+            "registration_date": generate_dirty_date(),
             "account_status": random.choice([0, 1, "Y", "N", "Active"]),
         }
 
