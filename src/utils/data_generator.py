@@ -1,11 +1,12 @@
+import os
 import pandas as pd
 from faker import Faker
 import random
-import sqlalchemy
+from loguru import logger
 
 fake = Faker()
-
 RECORDS_COUNT = 1_000
+OUTPUT_FILE = "data/raw/customers_dump.csv"
 
 
 def generate_dirty_date():
@@ -26,27 +27,33 @@ def generate_dirty_phone():
     return fake.basic_phone_number()
 
 
-generated_data = []
-emails_cache = []
+if __name__ == "__main__":
+    os.makedirs("data/raw", exist_ok=True)
+    logger.info(f"Generating {RECORDS_COUNT} records...")
 
-for x in range(RECORDS_COUNT):
-    # Create email duplicates
-    if (len(emails_cache) > 0) and (random.random() < 0.1):
-        email = random.choice(emails_cache)
-    else:
-        email = fake.email()
-        emails_cache.append(email)
+    generated_data = []
+    emails_cache = []
 
-    record = {
-        "client_id": x + 1000,
-        "full_name": fake.name(),
-        "email": email,
-        "phone": generate_dirty_phone(),
-        "date": generate_dirty_date(),
-        "account_status": random.choice([0, 1, "Y", "N", "Active"]),
-    }
+    for x in range(RECORDS_COUNT):
+        # Create email duplicates
+        if (len(emails_cache) > 0) and (random.random() < 0.1):
+            email = random.choice(emails_cache)
+        else:
+            email = fake.email()
+            emails_cache.append(email)
 
-    generated_data.append(record)
+        record = {
+            "client_id": x + 1000,
+            "full_name": fake.name(),
+            "email": email,
+            "phone": generate_dirty_phone(),
+            "date": generate_dirty_date(),
+            "account_status": random.choice([0, 1, "Y", "N", "Active"]),
+        }
 
-legacy_data = pd.DataFrame(generated_data)
-print(legacy_data.head())
+        generated_data.append(record)
+
+        df = pd.DataFrame(generated_data)
+
+        df.to_csv(OUTPUT_FILE, index=False, sep=",")
+        logger.success(f"Done: {OUTPUT_FILE}")
