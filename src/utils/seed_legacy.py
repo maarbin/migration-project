@@ -2,17 +2,22 @@ import os
 import pandas as pd
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
+from loguru import logger
+
+# ------------------------
 
 load_dotenv()
 DB_URL = os.getenv("DB_URL_LEGACY")
-CSV_PATH = "data/raw/customers_dump.csv"
+CSV_PATH = "data/raw/customer_dump.csv"
+
+# ------------------------
 
 
-def load_data():
+def load_data() -> str | None:
     if not os.path.exists(CSV_PATH):
         return "Data does not exist."
     else:
-        print("Loading data...")
+        logger.info("Loading data...")
         df = pd.read_csv(CSV_PATH)
         engine = create_engine(DB_URL)
 
@@ -21,14 +26,14 @@ def load_data():
             "legacy",
             engine,
             schema="raw_data",
-            if_exists="append",
+            if_exists="replace",
             index=False,
-            chunksize=100,
+            chunksize=500,
         )
-        print("SUCCESS")
+        logger.success("SUCCESS")
 
     except Exception as e:
-        print(f"Following error occured: {e}")
+        logger.error(f"Following error occured: {e}")
 
 
 if __name__ == "__main__":
