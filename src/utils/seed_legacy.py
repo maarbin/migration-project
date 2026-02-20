@@ -18,7 +18,7 @@ def load_data() -> str | None:
         return "Data does not exist."
     else:
         logger.info("Loading data...")
-        df = pd.read_csv(CSV_PATH)
+        df = pd.read_csv(CSV_PATH, sep=";")
         engine = create_engine(DB_URL)
 
     try:
