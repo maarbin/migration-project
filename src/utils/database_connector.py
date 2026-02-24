@@ -24,4 +24,8 @@ class DatabaseConnector:
             logger.error("Database is not connected:", e)
 
     def fetch_dataframe(self, query):
-        return pd.read_sql(query, self.conn)
+        try:
+            return pd.read_sql(query, self.conn)
+        except psycopg2.Error as e:
+            logger.error("Database query failed")
+            raise RuntimeError("Database fetch failed") from e
