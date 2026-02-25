@@ -32,7 +32,9 @@ DIR.mkdir(exist_ok=True)
 
 
 def generate_dirty_date() -> str | None:
-    # Generate random date format with 1% chance of None
+    """
+    Generate random date format with 1% chance of None
+    """
     date_format = random.choice(["%Y-%m-%d", "%d/%m/%Y", "%d.%m.%Y"])
 
     if random.random() < 0.01:
@@ -42,7 +44,9 @@ def generate_dirty_date() -> str | None:
 
 
 def generate_dirty_phone() -> str | None:
-    # Generate phone number with 5% chance of None
+    """
+    Generate phone number with 5% chance of None
+    """
     if random.random() < 0.05:
         return None
 
@@ -53,7 +57,9 @@ _emails_cache = []
 
 
 def generate_email_with_duplicates() -> str:
-    # Create random email with chance of duplicates
+    """
+    Create random email with chance of duplicates
+    """
     if (len(_emails_cache) > 0) and (random.random() < 0.1):
         return random.choice(_emails_cache)
     email = fake.email()

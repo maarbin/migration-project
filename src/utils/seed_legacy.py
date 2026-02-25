@@ -14,6 +14,11 @@ CSV_PATH = "data/raw/customer_dump.csv"
 
 
 def load_data() -> str | None:
+    """
+    Load data into legacy database.
+
+    Raises Exception if fails.
+    """
     if not os.path.exists(CSV_PATH):
         return "Data does not exist."
     else:

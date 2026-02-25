@@ -16,7 +16,17 @@ OUTPUT_PATH = "data/legacy_dump/legacy_dump.csv"
 # ------------------------
 
 
-def extract():
+def extract() -> str | None:
+    """
+    Connect to the Postgres database, download query result into DataFrame, save in indicated location and close connection.
+
+    Raises:
+        RuntimeError: Query failed
+        OSError: Output directory does not exist.
+
+    Returns:
+        str | None: Output directory as a string if success. None if failed.
+    """
     connector = DatabaseConnector()
 
     try:
