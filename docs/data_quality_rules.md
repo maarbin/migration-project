@@ -76,8 +76,10 @@ assert df['email'].notna().all()
 |--------|--------|----------------|
 | client_id (INT) | _source_system_id (INT) | Copy as-is |
 | - | customer_id (UUID) | Generate new UUID |
-| account_status (TEXT) | is_active (BOOLEAN) | "active" → TRUE, else FALSE |
-| registration_date (TEXT) | registration_date (DATE) | Parse + validate |
+| account_status (TEXT) | is_active (BOOLEAN) | "active, 1, Y" → TRUE, else FALSE |
+| registration_date (TEXT) | registration_date (DATE) | Normalize to ISO, future dates → NULL |
+| full_name (TEXT) | first_name (TEXT) AND last_name (TEXT) | First token = first_name, rest = last_name, flag if <2 or >3 tokens |
+| phone (TEXT) | phone_number (TEXT) | Strip non-digits, keep NULL as NULL
 
 ## 6. Idempotency
 **Rule:** Running migration multiple times produces same result (no duplicates).
